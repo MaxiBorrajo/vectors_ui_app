@@ -103,5 +103,5 @@ buscador-vectorial/
 
 ## 📫 Contacto
 
-Desarrollado por **CUKI** 🧠  
+Desarrollado por **HTML ES UN LENGUAJE DE PROGRAMACIÓN ¡CARAJO!** 🧠  
 Si tenés preguntas o querés mejorar este proyecto, ¡hacé un fork o escribime!
