@@ -58,7 +58,7 @@ pip freeze > requirements.txt
 ## ▶️ Cómo ejecutar
 
 ```bash
-streamlit run app.py
+streamlit run app.py --server.runOnSave=false
 ```
 
 > El archivo principal se llama `app.py`. Si lo nombraste distinto, ajustá el comando.

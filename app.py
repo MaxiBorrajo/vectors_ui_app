@@ -128,3 +128,77 @@ if image_to_search and st.button("Buscar imágenes similares"):
         for meta in results["metadatas"][0]:
             if meta["type"] == "image":
                 st.image(f"{DOCS_FOLDER}/{meta['source']}", caption=meta["source"])
+
+# ----------------------------
+# 📊 Visualización de vectores
+# ----------------------------
+from sklearn.decomposition import PCA
+import pandas as pd
+import plotly.express as px
+
+st.subheader("📊 Visualización 2D de vectores")
+
+if st.button("Mostrar embeddings en 2D"):
+    with st.spinner("Procesando vectores..."):
+        results = collection.get(include=["embeddings", "metadatas"])
+        embeddings = results["embeddings"]
+        metadatas = results["metadatas"]
+        labels = [meta["source"] for meta in metadatas]
+        tipos = [meta["type"] for meta in metadatas]
+
+        # Reducción de dimensión
+        pca = PCA(n_components=2)
+        reduced = pca.fit_transform(embeddings)
+
+        df = pd.DataFrame(reduced, columns=["x", "y"])
+        df["label"] = labels
+        df["tipo"] = tipos
+
+        fig = px.scatter(
+            df, x="x", y="y", color="tipo", text="label",
+            title="📊 Visualización de Embeddings (PCA 2D)",
+            labels={"tipo": "Tipo de documento"}
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+import umap
+import plotly.express as px
+
+st.subheader("🗺️ Visualización de Embeddings (UMAP)")
+
+# if st.button("Visualizar imágenes con UMAP"):
+#     with st.spinner("Generando proyección UMAP..."):
+#         # Obtener todos los embeddings e info de imágenes
+#         results = collection.get(include=["embeddings", "metadatas"])
+#         vectors = []
+#         filenames = []
+
+#         if results["embeddings"] and results["metadatas"]:
+#             for vec, meta in zip(results["embeddings"], results["metadatas"]):
+#                 if meta and meta.get("type") == "image":
+#                     vectors.append(vec)
+#                     filenames.append(meta.get("source", "img"))
+
+#         if vectors:
+#             reducer = umap.UMAP(random_state=42)
+#             coords = reducer.fit_transform(vectors)
+
+#             import pandas as pd
+#             import plotly.express as px
+
+#             df = pd.DataFrame({
+#                 "x": [c[0] for c in coords],
+#                 "y": [c[1] for c in coords],
+#                 "Nombre de archivo": filenames,
+#                 "Tipo de documento": ["image"] * len(filenames)
+#             })
+
+#             fig = px.scatter(
+#                 df, x="x", y="y", text="Nombre de archivo", color="Tipo de documento",
+#                 title="🧠 Visualización de Embeddings (UMAP 2D)",
+#                 height=600
+#             )
+#             fig.update_traces(textposition='top center')
+#             st.plotly_chart(fig, use_container_width=True)
+#         else:
+#             st.warning("No hay imágenes vectorizadas para mostrar.")
