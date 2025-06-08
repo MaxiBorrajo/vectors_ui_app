@@ -1,0 +1,11 @@
+streamlit
+Pillow
+sentence-transformers
+langchain
+transformers
+torch
+chromadb
+scikit-learn
+pandas
+plotly
+umap-learn
